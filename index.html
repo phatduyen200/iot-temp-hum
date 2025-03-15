@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điều khiển thiết bị</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Import jQuery -->
+    <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"> </script>
+    
+</html>
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7; /* Nền sáng dễ nhìn */
+            color: #333; /* Màu chữ tối */
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .device-card {
+            background-color: #fff;
+            width: 280px;
+            height: 130px; /* Tăng chiều cao */
+            margin: 10px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .device-card2 {
+            background-color: #fff;
+            width: 280px;
+            height: 250PX; /* Tăng chiều cao */
+            margin: 10px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        
+        .device-card:hover {
+            transform: translateY(-10px); /* Tạo hiệu ứng nổi lên khi hover */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Hiệu ứng shadow khi hover */
+        }
+        
+        .device-card h3 {
+            font-size: 22px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        
+        .device-card .switch {
+            margin-top: 30px;
+        }
+        
+        .device-card .battery,
+        .device-card .voltage {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #888;
+        }
+        
+        .battery-level {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .battery-level span {
+            margin-left: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ddd; /* Màu nền slider */
+            transition: 0.4s;
+            border-radius: 34px;
+            width: 70px; /* Tăng chiều rộng của slider */
+            height: 35px; /* Tăng chiều cao của slider */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Thêm bóng mờ */
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: #fff;
+            transition: 0.4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #4CAF50; /* Màu nền khi bật */
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(35px); /* Di chuyển slider sang phải */
+        }
+        
+        .battery-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ccc;
+            margin-left: 10px;
+            position: relative;
+            border-radius: 5px;
+        }
+        
+        .battery-level-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+        
+        .voltage {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        #voltage1, #voltage2, #voltage3, #voltage4 {
+            font-size: 20px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .device-card .battery h4,
+        .device-card .voltage h4 {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        /* Thêm các hiệu ứng cho background của các phần tử khác */
+        .battery-bar {
+            background: linear-gradient(90deg, #eeeeee 0%, #f7f7f7 100%); /* Nền đẹp hơn */
+        }
+        
+        .slider {
+            background-color: #f2f2f2; /* Màu nền slider nhẹ nhàng */
+        }
+        
+        .slider:before {
+            background-color: #fff; /* Slider tròn và dễ nhìn */
+        }
+        
+        input:checked + .slider {
+            background-color: #66bb6a; /* Màu xanh khi bật */
+        }
+        
+        input:checked + .slider:before {
+            background-color: white;
+            transform: translateX(30px);
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>HỆ THỐNG SẠC PIN</h1>
+    <img src="logo.png" width="5%">
+    <div class="container">
+        <!-- Thiết bị 1 -->
+            <div class="device-card">
+              <h3>THIẾT BỊ 1</h3>
+            <label class="switch">
+                <input type="checkbox" id="device1" />
+                <span class="slider"></span>
+            </label>
+       
+        </div>
+
+        <!-- Thiết bị 2 -->
+        <div class="device-card">
+            <h3>THIẾT BỊ 2</h3>
+            <label class="switch">
+                <input type="checkbox" id="device2" />
+                <span class="slider"></span>
+            </label>
+           
+        
+        </div>
+
+        <!-- Thiết bị 3 -->
+        <div class="device-card2">
+            <h3>NHIỆT ĐỘ, ĐỘ ẨM</h3>
+
+            <div class="voltage">
+                <h4>NHIỆT ĐỘ:</h4>
+                <div id="voltage3">30</div>
+            </div>
+            <div class="voltage">
+                <h4>ĐỘ ẨM:</h4>
+                <div id="voltage4">50</div>
+            </div>
+        </div>   
+    </div>
+</body>
+<script src="database.js"> </script>
+</html>
