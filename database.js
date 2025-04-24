@@ -1,16 +1,16 @@
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDLqJQTDbArOQ6F2TN9FuY-HgNV9FDAmtg",
-    authDomain: "project-e3b3a.firebaseapp.com",
-    databaseURL: "https://project-e3b3a-default-rtdb.firebaseio.com",
-    projectId: "project-e3b3a",
-    storageBucket: "project-e3b3a.firebasestorage.app",
-    messagingSenderId: "690254774265",
-    appId: "1:690254774265:web:cf9b248e5d5825eba6c728",
-    measurementId: "G-FLVDQF954Z"
+  apiKey: "AIzaSyDgL81YLJXDG3-WtJjDZrEgAJbkKAAt18o",
+  authDomain: "lekytuan2.firebaseapp.com",
+  databaseURL: "https://lekytuan2-default-rtdb.firebaseio.com",
+  projectId: "lekytuan2",
+  storageBucket: "lekytuan2.firebasestorage.app",
+  messagingSenderId: "249420942882",
+  appId: "1:249420942882:web:097d8ec18a2b0dbd89847b"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
